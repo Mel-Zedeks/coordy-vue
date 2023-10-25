@@ -201,8 +201,8 @@ const handleEmit = (section, data) => {
                             <c-select class=" w-18" v-if="length(limits) > 0 && limits.options"
                                       :default-value="limits.default" :options="limits?.options"
                                       v-model="selectedLimit"/>
-                            <c-select class=" w-28 max-w-32"
-                                      :options="[{key:'delete',label:'Delete'},{key:'edit',label:'Edit'}]"/>
+<!--                            <c-select class=" w-28 max-w-32"-->
+<!--                                      :options="[{key:'delete',label:'Delete'},{key:'edit',label:'Edit'}]"/>-->
                         </div>
                         <div class="w-48">
                             <c-input v-if="length(search)>0" :placeholder="search.placeholder"

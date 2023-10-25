@@ -88,6 +88,7 @@ const handleConditions = (action, content) => {
         label: action.label,
         route: action.route,
         icon: action.icon,
+        method: action.method,
     }
     if (hasCondition(action) && hasKey(action.condition, 'check')) {
         if (action.condition.check.is === 'eq') {
