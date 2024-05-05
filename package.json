@@ -1,6 +1,6 @@
 {
   "name": "@mel-zedeks/coordy-vue",
-  "version": "3.0.0",
+  "version": "3.0.5",
   "description": "Coordy is a smart Datatable | this is the Vue version supports REST APIs / Inertia.js (Laravel - VILT) as backend",
   "author": "Melchizedek Logosu (Mel-Zedeks)",
   "type": "module",

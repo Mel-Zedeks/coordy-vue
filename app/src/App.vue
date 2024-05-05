@@ -1,14 +1,14 @@
 <template>
     <div class="flex justify-center items-center h-screen w-full bg-gray-200 ">
         <Coordy :data="backend" @coordy-payload="(e)=> console.log(e)">
-            <template #balance="{content}">
-                GHs {{ content['balance'] }}
-            </template>
-            <template #is_active="{content}">
-                <span :class="['px-2 py-1',{'bg-emerald-500':content['is_active']===true,'bg-red-500':content['is_active']===false}]">{{
-                    content['is_active']
-                    }}</span>
-            </template>
+<!--            <template #balance="{content}">-->
+<!--                GHs {{ content['balance'] }}-->
+<!--            </template>-->
+<!--            <template #is_active="{content}">-->
+<!--                <span :class="['px-2 py-1',{'bg-emerald-500':content['is_active']===true,'bg-red-500':content['is_active']===false}]">{{-->
+<!--                    content['is_active']-->
+<!--                    }}</span>-->
+<!--            </template>-->
 
         </Coordy>
         <!--      <z-table -->
@@ -37,38 +37,44 @@
 <script setup>
 
 import {reactive} from "vue";
+import CCheckbox from "../../src/Components/Forms/c-checkbox.vue";
 
 
 const backend = reactive({
     headers: [
         {
-            key: "image.original_url",
-            label: "Photo",
-            type: "html",
-            template: `<img src="bootstrap" class="h-12 w-12 bg-white rounded-full border" alt="..."/>`
+          key: "classsections[*].name",
+          label: "academic_year",
         },
-        {
-            key: "id",
-            label: "ID",
-            type: "link",
-            template: "http://localhost:5173/:id",
-            templateKey: "id",
-        },
-        'full_name',
-        {
-            key: 'email',
-            type: "html",
-            template: `<a style="color: #2563eb" href="mailto:%value%">%label%:%value%</a>`
-        },
-        {
-            label: "Status",
-            key: "is_active",
-            type: 'slot',
-        },
-        {
-            key: "balance",
-            type: 'slot',
-        },
+        'name',
+        // {
+        //     key: "image.original_url",
+        //     label: "Photo",
+        //     type: "html",
+        //     template: `<img src="bootstrap" class="h-12 w-12 bg-white rounded-full border" alt="..."/>`
+        // },
+        // {
+        //     key: "id",
+        //     label: "ID",
+        //     type: "link",
+        //     template: "http://localhost:5173/:id",
+        //     templateKey: "id",
+        // },
+        // 'full_name',
+        // {
+        //     key: 'email',
+        //     type: "html",
+        //     template: `<a style="color: #2563eb" href="mailto:%value%">%label%:%value%</a>`
+        // },
+        // {
+        //     label: "Status",
+        //     key: "is_active",
+        //     type: 'slot',
+        // },
+        // {
+        //     key: "balance",
+        //     type: 'slot',
+        // },
         // {
         //   label: "Email2",
         //   key: "email",
@@ -78,137 +84,154 @@ const backend = reactive({
     content: {
         data: [
             {
-                "id": 1,
-                "is_active": true,
-                "email": 'mel.logo@example.com',
-                "full_name": "Mel logo",
-                "image": {
-                    id: 1,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 3000,
-                "created_at": "2020-01-01T16:13:41.000000Z",
-                "updated_at": "2020-01-01T16:13:41.000000Z",
-            },
-            {
-                "id": 2,
-                "is_active": true,
-                "email": 'john.doe@example.com',
-                "full_name": "John Doe",
-                "image": {
-                    id: 2,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 4000,
-                "created_at": "2020-02-02T14:30:22.000000Z",
-                "updated_at": "2020-02-02T14:30:22.000000Z",
-            },
-            {
-                "id": 3,
-                "is_active": false,
-                "email": 'alice.smith@example.com',
-                "full_name": "Alice Smith",
-                "image": {
-                    id: 3,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 1500,
-                "created_at": "2020-03-03T09:45:15.000000Z",
-                "updated_at": "2020-03-03T09:45:15.000000Z",
-            },
-            {
-                "id": 4,
-                "is_active": true,
-                "email": 'jane.roe@example.com',
-                "full_name": "Jane Roe",
-                "image": {
-                    id: 4,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 2800,
-                "created_at": "2020-04-04T18:20:37.000000Z",
-                "updated_at": "2020-04-04T18:20:37.000000Z",
-            },
-            {
-                "id": 5,
-                "is_active": true,
-                "email": 'sam.jackson@example.com',
-                "full_name": "Sam Jackson",
-                "image": {
-                    id: 5,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 5000,
-                "created_at": "2020-05-05T12:15:10.000000Z",
-                "updated_at": "2020-05-05T12:15:10.000000Z",
-            },
-            {
-                "id": 6,
-                "is_active": false,
-                "email": 'david.brown@example.com',
-                "full_name": "David Brown",
-                "image": {
-                    id: 6,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 900,
-                "created_at": "2020-06-06T08:55:48.000000Z",
-                "updated_at": "2020-06-06T08:55:48.000000Z",
-            },
-            {
-                "id": 7,
-                "is_active": true,
-                "email": 'laura.wilson@example.com',
-                "full_name": "Laura Wilson",
-                "image": {
-                    id: 7,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 750,
-                "created_at": "2020-07-07T17:40:29.000000Z",
-                "updated_at": "2020-07-07T17:40:29.000000Z",
-            },
-            {
-                "id": 8,
-                "is_active": true,
-                "email": 'peter.evans@example.com',
-                "full_name": "Peter Evans",
-                "image": {
-                    id: 8,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 2000,
-                "created_at": "2020-08-08T11:22:55.000000Z",
-                "updated_at": "2020-08-08T11:22:55.000000Z",
-            },
-            {
-                "id": 9,
-                "is_active": false,
-                "email": 'olivia.baker@example.com',
-                "full_name": "Olivia Baker",
-                "image": {
-                    id: 9,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 350,
-                "created_at": "2020-09-09T19:05:14.000000Z",
-                "updated_at": "2020-09-09T19:05:14.000000Z",
-            },
-            {
-                "id": 10,
-                "is_active": true,
-                "email": 'william.clark@example.com',
-                "full_name": "William Clark",
-                "image": {
-                    id: 10,
-                    original_url: "link/to/some/dummy/profile-image"
-                },
-                balance: 6000,
-                "created_at": "2020-10-10T15:12:33.000000Z",
-                "updated_at": "2020-10-10T15:12:33.000000Z",
-            },
-            // Add 9 more entries following a similar structure here...
-        ],
+                "_id": "6539ea6dbd8d895d49d57480",
+                "class_section_ids": ["6539e7ffbd8d895d49d5747e", "6539e807bd8d895d49d5747f"],
+                "classsections": [{
+                    "_id": "6539e7ffbd8d895d49d5747e",
+                    "name": "A",
+                    "timestamp": {"created_at": "0001-01-01T00:00:00Z", "updated_at": "0001-01-01T00:00:00Z"}
+                }, {
+                    "_id": "6539e807bd8d895d49d5747f",
+                    "name": "B",
+                    "timestamp": {"created_at": "0001-01-01T00:00:00Z", "updated_at": "0001-01-01T00:00:00Z"}
+                }],
+                "name": "Class 1",
+                "timestamp": {"created_at": "0001-01-01T00:00:00Z", "updated_at": "0001-01-01T00:00:00Z"}
+            }
+        ]
+        // data: [
+        //     {
+        //         "id": 1,
+        //         "is_active": true,
+        //         "email": 'mel.logo@example.com',
+        //         "full_name": "Mel logo",
+        //         "image": {
+        //             id: 1,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 3000,
+        //         "created_at": "2020-01-01T16:13:41.000000Z",
+        //         "updated_at": "2020-01-01T16:13:41.000000Z",
+        //     },
+        //     {
+        //         "id": 2,
+        //         "is_active": true,
+        //         "email": 'john.doe@example.com',
+        //         "full_name": "John Doe",
+        //         "image": {
+        //             id: 2,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 4000,
+        //         "created_at": "2020-02-02T14:30:22.000000Z",
+        //         "updated_at": "2020-02-02T14:30:22.000000Z",
+        //     },
+        //     {
+        //         "id": 3,
+        //         "is_active": false,
+        //         "email": 'alice.smith@example.com',
+        //         "full_name": "Alice Smith",
+        //         "image": {
+        //             id: 3,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 1500,
+        //         "created_at": "2020-03-03T09:45:15.000000Z",
+        //         "updated_at": "2020-03-03T09:45:15.000000Z",
+        //     },
+        //     {
+        //         "id": 4,
+        //         "is_active": true,
+        //         "email": 'jane.roe@example.com',
+        //         "full_name": "Jane Roe",
+        //         "image": {
+        //             id: 4,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 2800,
+        //         "created_at": "2020-04-04T18:20:37.000000Z",
+        //         "updated_at": "2020-04-04T18:20:37.000000Z",
+        //     },
+        //     {
+        //         "id": 5,
+        //         "is_active": true,
+        //         "email": 'sam.jackson@example.com',
+        //         "full_name": "Sam Jackson",
+        //         "image": {
+        //             id: 5,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 5000,
+        //         "created_at": "2020-05-05T12:15:10.000000Z",
+        //         "updated_at": "2020-05-05T12:15:10.000000Z",
+        //     },
+        //     {
+        //         "id": 6,
+        //         "is_active": false,
+        //         "email": 'david.brown@example.com',
+        //         "full_name": "David Brown",
+        //         "image": {
+        //             id: 6,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 900,
+        //         "created_at": "2020-06-06T08:55:48.000000Z",
+        //         "updated_at": "2020-06-06T08:55:48.000000Z",
+        //     },
+        //     {
+        //         "id": 7,
+        //         "is_active": true,
+        //         "email": 'laura.wilson@example.com',
+        //         "full_name": "Laura Wilson",
+        //         "image": {
+        //             id: 7,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 750,
+        //         "created_at": "2020-07-07T17:40:29.000000Z",
+        //         "updated_at": "2020-07-07T17:40:29.000000Z",
+        //     },
+        //     {
+        //         "id": 8,
+        //         "is_active": true,
+        //         "email": 'peter.evans@example.com',
+        //         "full_name": "Peter Evans",
+        //         "image": {
+        //             id: 8,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 2000,
+        //         "created_at": "2020-08-08T11:22:55.000000Z",
+        //         "updated_at": "2020-08-08T11:22:55.000000Z",
+        //     },
+        //     {
+        //         "id": 9,
+        //         "is_active": false,
+        //         "email": 'olivia.baker@example.com',
+        //         "full_name": "Olivia Baker",
+        //         "image": {
+        //             id: 9,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 350,
+        //         "created_at": "2020-09-09T19:05:14.000000Z",
+        //         "updated_at": "2020-09-09T19:05:14.000000Z",
+        //     },
+        //     {
+        //         "id": 10,
+        //         "is_active": true,
+        //         "email": 'william.clark@example.com',
+        //         "full_name": "William Clark",
+        //         "image": {
+        //             id: 10,
+        //             original_url: "link/to/some/dummy/profile-image"
+        //         },
+        //         balance: 6000,
+        //         "created_at": "2020-10-10T15:12:33.000000Z",
+        //         "updated_at": "2020-10-10T15:12:33.000000Z",
+        //     },
+        //     // Add 9 more entries following a similar structure here...
+        // ],
         // links: [
         //   {
         //     "url": null,
@@ -307,10 +330,11 @@ const backend = reactive({
         },
         search: {
             placeholder: "Search",
-            buttonLabel: "Search",
+            // buttonLabel: "Search",
             // custom_buttom:false, Todo
             autoSearch: true,
-            debounce: 500
+            debounce: 500,
+            // fields: [] todo
         },
         exports: ['pdf', 'xlsx', 'csv'],
         tableFilter: {
@@ -391,19 +415,19 @@ const backend = reactive({
                         user: "id",
                     },
                     method: "get",
-                    condition: {
-                        check: {//Todo advance where , or, and , query
-                            if: 'is_active',
-                            is: "eq", // eq, lt, lte, gt, gte,btw
-                        },
-                        then:{
-                            true:{
-                                label: 'Deactivate',
-                                icon:`<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>`,
-                                route: "user.deactivate"
-                            },
-                        }
-                    },
+                    // condition: {
+                    //     check: {//Todo advance where , or, and , query
+                    //         if: 'is_active',
+                    //         is: "eq", // eq, lt, lte, gt, gte,btw
+                    //     },
+                    //     then: {
+                    //         true: {
+                    //             label: 'Deactivate',
+                    //             icon: `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>`,
+                    //             route: "user.deactivate"
+                    //         },
+                    //     }
+                    // },
                 }
             ]
         },
@@ -416,7 +440,7 @@ const backend = reactive({
         },
         header: {
             checkbox: {
-                // key:"email"
+                key:"name"
                 // selectAll: {
                 //     state: true,
                 //     default: false
