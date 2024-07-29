@@ -1,7 +1,7 @@
 <template>
   <div class="group-btn-wrapper">
     <template v-for="(link , link_index) in links" :key="link_index">
-      <button @click="goToPage(link.url)" class="" v-if="link_index===0">
+      <button @click="goToPage(link)" class="" v-if="link_index===0">
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-3" fill="none" viewBox="0 0 24 24"
                stroke="currentColor" stroke-width="2">
@@ -9,7 +9,7 @@
           </svg>
         </span>
       </button>
-      <button @click="goToPage(link.url)" class="" v-else-if="link_index===(links?.length)-1">
+      <button @click="goToPage(link)" class="" v-else-if="link_index===(links?.length)-1">
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-3" fill="none" viewBox="0 0 24 24"
                stroke="currentColor" stroke-width="2">
@@ -17,7 +17,7 @@
           </svg>
         </span>
       </button>
-      <button @click="goToPage(link.url)" class="" :class="{'pagination-active':link.active}" v-else>
+      <button @click="goToPage(link)" class="" :class="{'pagination-active':link.active}" v-else>
            <span>
            {{ link.label }}
            </span>
@@ -51,7 +51,11 @@ const links = computed(()=>{
 const goToPage=(link)=> {
     if (link.active) return;
     else {
-        emit('pagination',link)
+        emit('pagination', {
+            page: link.label,
+            url: link.url,
+            state: link.active,
+        })
     }
 }
 </script>

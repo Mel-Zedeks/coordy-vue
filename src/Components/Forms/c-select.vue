@@ -1,5 +1,5 @@
 <template>
-    <select class="z-select" :value="modelValue" @input="(e)=>$emit('update:modelValue', e.target.value)">
+    <select class="z-select z-table-limit" :value="modelValue" @input="(e)=>$emit('update:modelValue', e.target.value)">
         <option disabled value="">Select</option>
         <option :value="item.key" v-for="(item, index) in options" :selected="defaultValue===item.key"
                 :key="index">
