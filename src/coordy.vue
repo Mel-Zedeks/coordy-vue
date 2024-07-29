@@ -6,7 +6,7 @@ import CSelect from "@/Components/Forms/c-select.vue";
 import CLoadingModal from "@/Components/modals/c-loading-modal.vue";
 import CContentCounter from "@/Components/Table/c-content-counter.vue";
 import CPagination from "@/Components/Table/c-pagination.vue";
-import {computed, reactive, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import CTableHeader from "@/Components/Table/c-table-header.vue";
 import {useObj} from "@/Composable/useObj.js";
 import {useDataTable} from "@/Composable/useDataTable.js";
@@ -17,11 +17,14 @@ import {useStatics} from "@/Composable/useStatics.js";
 const props = defineProps({
     data: {
         type: Object,
+
         required: true,
         validator(value) {
             const {hasKey} = useObj()
-            return hasKey(value, ['content', 'settings', 'headers']);
-            /*new Error("data prop must have the follow ['headers','content','settings']")*/
+            if (hasKey(value, ['content', 'settings', 'headers'])) {
+                return true
+            }
+            throw new Error("data prop must have the follow ['headers','content','settings']")
         }
     }
 })
@@ -30,9 +33,9 @@ const props = defineProps({
 const {hasKey, length} = useObj()
 const {getContentByKey, slotName, computeHeaders, computeLinkTemplate, computeHtmlTemplate} = useDataTable()
 
-const pickHeaders = computed(() => props.data.headers)
-const pickSettings = computed(() => props.data.settings)
-const pickContent = computed(() => props.data.content)
+const pickHeaders = computed(() => props.data?.headers)
+const pickSettings = computed(() => props.data?.settings)
+const pickContent = computed(() => props.data?.content)
 
 const defaultSettings = reactive({
     tableTitle: {
@@ -149,7 +152,13 @@ const payLoad = ref({
         sort: [],
         actions: {},
     },
-    footer: {}
+    footer: {
+        pagination: {
+            url: null,
+            page: 1,
+            state: false
+        }
+    }
 })
 const emit = defineEmits(['coordy-payload'])
 const searchTerm = ref("")
@@ -167,13 +176,19 @@ const preparePayload = (section, data) => {
     // isLoading.value=!isLoading.value
 }
 
-watch(payLoad,(value, oldValue)=>{
+watch(payLoad, (value, oldValue) => {
     emit('coordy-payload', value)
-}, { deep: true })
+}, {deep: true})
+
+onMounted(() => {
+    setTimeout(() => {
+        window.HSStaticMethods.autoInit();
+    }, 100)
+})
 </script>
 
 <template>
-    <div class="flex flex-wrap mt-4">
+    <div class="flex flex-wrap mt-4 w-full relative">
         <div class="w-full mb-12 px-4">
             <div
                     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white"
@@ -181,17 +196,12 @@ watch(payLoad,(value, oldValue)=>{
                 <section class="rounded-t mb-0 px-4 py-3 border-0">
                     <div class="flex justify-between items-center">
                         <div class="">
-                            <span class="font-semibold text-lg text-slate-700">
+                            <span class="table-title">
                                 {{ tableTitle }}
                                 <!--                                table title-->
                             </span>
                         </div>
-                        <div class="flex justify-end items-center space-x-2">
-                            <c-link-btn class="z-btn" :label="addNew?.label" :uri="addNew?.uri"
-                                        v-if="length(addNew)>0 && addNew.label"/>
-                            <c-link-btn class="z-btn" :label="addBulk?.label" :uri="addBulk?.uri"
-                                        v-if="length(addBulk)>0 && addBulk.label"/>
-                        </div>
+
                     </div>
                 </section>
                 <section class=" mb-0 px-4 py-1 border-0">
@@ -207,25 +217,33 @@ watch(payLoad,(value, oldValue)=>{
                         </div>
                     </div>
                 </section>
-                <section class=" mb-0 px-4 py-1 border-0">
-                    <div class="flex justify-between items-center">
-                        <div class="flex justify-start items-center space-x-2">
+                <section class=" z-section-1">
+                    <div class="z-section-container">
+                        <div class="z-table-limit-wrapper">
                             <c-select class=" w-18" v-if="length(limits) > 0 && limits.options"
                                       :default-value="limits.default" :options="limits?.options"
                                       v-model="selectedLimit"/>
                             <!--                            <c-select class=" w-28 max-w-32"-->
                             <!--                                      :options="[{key:'delete',label:'Delete'},{key:'edit',label:'Edit'}]"/>-->
                         </div>
-                        <div class="w-48">
+                        <div class="z-table-search-wrapper">
                             <c-input v-if="length(search)>0" :placeholder="search.placeholder"
                                      @input="debounceSearchField" v-model="searchTerm"/>
                         </div>
                     </div>
+                    <div class="z-section-container">
+                        <div class="flex justify-end items-center space-x-2">
+                            <c-link-btn class="z-btn" :label="addNew?.label" :uri="addNew?.uri"
+                                        v-if="length(addNew)>0 && addNew.label"/>
+                            <c-link-btn class="z-btn" :label="addBulk?.label" :uri="addBulk?.uri"
+                                        v-if="length(addBulk)>0 && addBulk.label"/>
+                        </div>
+                    </div>
                 </section>
-                <div class="flex flex-col overflow-x-auto mt-2">
+                <div class="z-table-container">
                     <!-- Projects table -->
                     <c-loading-modal v-if="isLoading"/>
-                    <table class="items-center w-full bg-transparent border-collapse">
+                    <table class="z-table">
                         <c-table-header :headers="pickHeaders" :options="pickSettings.header" :table-actions="actions"
                                         @select-all="selectAllCheckBoxes"
                                         @sort-headers="(e)=>preparePayload('body.sort',e)"/>
@@ -288,7 +306,7 @@ watch(payLoad,(value, oldValue)=>{
                     <!--        count-->
                     <c-content-counter :content="pickContent" @counter="(e)=>tableCounter.value=e"/>
                     <!--        pagination-->
-                    <c-pagination @pagination="" :content="pickContent"/>
+                    <c-pagination :content="pickContent"  @pagination="(e)=>preparePayload('footer.pagination',e)"/>
 
                 </section>
 

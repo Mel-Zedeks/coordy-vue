@@ -7,7 +7,7 @@
             </th>
             <th v-else :class="thClass"
                 @click.prevent="handleSort(header)">
-                <div class="flex justify-between items-center w-full space-x-2"
+                <div class="th-content"
                      v-if="columnTypes.includes(header.type)">
                 <span>
                 {{ header.label }}

@@ -1,14 +1,14 @@
 <template>
     <div class="flex justify-center items-center h-screen w-full bg-gray-200 ">
-        <Coordy :data="backend" @coordy-payload="(e)=> console.log(e)">
-<!--            <template #balance="{content}">-->
-<!--                GHs {{ content['balance'] }}-->
-<!--            </template>-->
-<!--            <template #is_active="{content}">-->
-<!--                <span :class="['px-2 py-1',{'bg-emerald-500':content['is_active']===true,'bg-red-500':content['is_active']===false}]">{{-->
-<!--                    content['is_active']-->
-<!--                    }}</span>-->
-<!--            </template>-->
+        <Coordy :data="backend2" class="style2" @coordy-payload="handlePayload">
+            <!--            <template #balance="{content}">-->
+            <!--                GHs {{ content['balance'] }}-->
+            <!--            </template>-->
+            <!--            <template #is_active="{content}">-->
+            <!--                <span :class="['px-2 py-1',{'bg-emerald-500':content['is_active']===true,'bg-red-500':content['is_active']===false}]">{{-->
+            <!--                    content['is_active']-->
+            <!--                    }}</span>-->
+            <!--            </template>-->
 
         </Coordy>
         <!--      <z-table -->
@@ -36,15 +36,121 @@
 
 <script setup>
 
-import {reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import CCheckbox from "../../src/Components/Forms/c-checkbox.vue";
+import axios from "axios";
 
+onMounted(() => {
+    getData()
+})
+const selectAllRows = ref(false)
+const selectedRows = ref([])
+const searchTerm = ref("")
+const searchFields = ref([])
+const limit = ref("")
+const page = ref("")
+const urlQuery = ref("")
+const handlePayload = (e) => {
+    console.log(e)
+    //checkboxes
+    selectedRows.value = e.body.checkbox.selected
+    selectAllRows.value = e.head.checkbox.selectAll
 
+    //pagination
+    page.value = e.footer.pagination
+    //limit
+    limit.value = e.head.limit
+
+    //search
+    searchTerm.value = e.head.search.text
+    searchFields.value = e.head.search.fields
+
+    let query = []
+    if (page.value) {
+        let pageNum = parseInt(page.value?.page) || 1;
+        query.push("page=" + pageNum)
+    }
+    if (limit.value) {
+        let limits = parseInt(limit.value) || 10;
+        query.push("limit=" + limits)
+    }
+    if (searchTerm.value) {
+        query.push("search=" + searchTerm.value)
+    }
+
+    urlQuery.value = query.join('&')
+    getData(urlQuery.value)
+
+}
+const getData = (query = null) => {
+    // const url = new URL(window.location);
+    let queryStr = ""
+    let url = window.location
+    let backUrl = "http://127.0.0.1:8000/test"
+    if (query) {
+        queryStr = "?" + query
+        url =  url + queryStr
+        window.history.replaceState({}, '', url);
+        backUrl = backUrl + queryStr
+    }
+    console.log(backUrl)
+    axios.get(backUrl).then(res => {
+        backend2.content = res.data.data
+    })
+
+}
+const backend2 = reactive({
+    headers: ["name",
+        {
+            key: "token",
+            label: "Access Token"
+        }
+    ],
+    content: [],
+    settings: {
+        tableTitle: "All Apps",
+        addNew: {
+            uri: "",
+            label: "MyCreate"
+        },
+        limits: {
+            default: "30",
+            options: [
+                {
+                    key: "10",
+                    label: "10",
+                },
+            ]
+        },
+        search: {
+            placeholder: "Search",
+            autoSearch: true,
+            debounce: 500,
+        },
+        actions: {
+            type: "dropDown",// => dropDown | iconButtons | textButtons | rightClickRow | clickRow
+            position: "trailing", // leading | trailing works with => dropDown | iconButtons | textButtons
+            return: "object", // string | object => string= '/show/:id/:others' object= {route:'users.show',[params],type}
+            data: [
+                {
+                    label: "View and something",
+                    route: "user.show",
+                    params: {
+                        user: "id",
+                        email: "email"
+                    },
+                    method: "get"
+                }
+            ]
+        }
+    }
+
+});
 const backend = reactive({
     headers: [
         {
-          key: "classsections[*].name",
-          label: "academic_year",
+            key: "classsections[*].name",
+            label: "academic_year",
         },
         'name',
         // {
@@ -440,7 +546,7 @@ const backend = reactive({
         },
         header: {
             checkbox: {
-                key:"name"
+                key: "name"
                 // selectAll: {
                 //     state: true,
                 //     default: false

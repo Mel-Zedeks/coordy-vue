@@ -1,6 +1,6 @@
 {
   "name": "@mel-zedeks/coordy-vue",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "description": "Coordy is a smart Datatable | this is the Vue version supports REST APIs / Inertia.js (Laravel - VILT) as backend",
   "author": "Melchizedek Logosu (Mel-Zedeks)",
   "type": "module",
@@ -24,15 +24,13 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-
-  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.3.4",
     "autoprefixer": "^10.4.15",
-    "axios": "^0.27.2",
+    "axios": "^1.7.2",
     "lodash": "^4.17.21",
     "postcss": "^8.4.28",
+    "sass": "^1.77.8",
     "tailwindcss": "^3.3.3",
     "vite": "^4.4.9",
     "vue": "^3.2.47"
@@ -42,5 +40,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@preline/dropdown": "^2.4.1",
+    "preline": "^2.4.1"
   }
 }
