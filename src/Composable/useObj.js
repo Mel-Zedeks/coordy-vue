@@ -1,6 +1,9 @@
-export function useObj(){
-    const hasKey=(object, key)=>{
-        if (!Array.isArray(key)){
+export function useObj() {
+    const hasKey = (object, key) => {
+        if (object === null || object === undefined) {
+            return false
+        }
+        if (!Array.isArray(key)) {
             return Object.keys(object).includes(key)
         }
         for (const k of key) {
@@ -8,8 +11,8 @@ export function useObj(){
         }
         return true
     }
-    const length=(object)=>{
+    const length = (object) => {
         return Object.keys(object).length
     }
-    return {hasKey,length}
+    return {hasKey, length}
 }

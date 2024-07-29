@@ -24,26 +24,33 @@ const emit = defineEmits(['counter'])
 const counter = computed(() => calculateCounter())
 
 
-const calculateCounter=()=>{
-    let counter={};
-    if (hasKey(props.content,'meta') && length(props.content.meta) >1){
+const calculateCounter = () => {
+    let counter = {};
+    if (hasKey(props.content, 'meta') && length(props.content.meta) > 1) {
         const meta = props.content.meta;
-        counter={
-            from:meta.from || 0,
-            to:meta.to || 0,
-            total:meta.total || 0
+        counter = {
+            from: meta.from || 0,
+            to: meta.to || 0,
+            total: meta.total || 0
         }
     }
-    else {
-        const count =props.content.data.length
-        counter={
-            from:1,
-            to:count,
-            total:count
+    if (hasKey(props.content, 'links') && length(props.content.links) > 1) {
+
+        counter = {
+            from: props.content?.from || 0,
+            to: props.content?.to || 0,
+            total: props.content?.total || 0
+        }
+    } else {
+        const count = hasKey(props.content, 'data') ? length(props.content.data) : 0
+        counter = {
+            from: 1,
+            to: count,
+            total: count
         }
     }
-    emit('counter',counter)
-    return  counter
+    emit('counter', counter)
+    return counter
 }
 
 

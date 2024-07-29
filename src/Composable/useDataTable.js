@@ -24,7 +24,7 @@ export function useDataTable() {
         }
         return "#"
     }
-    const computeHeaders = (headers, actions = {},enableCheckbox=false) => {
+    const computeHeaders = (headers, actions = {}, enableCheckbox = false) => {
         const newHeaders = [];
 
         headers.forEach(header => {
@@ -36,11 +36,7 @@ export function useDataTable() {
             let template = "";
             let templateKey = "";
 
-            if (typeof header !== "object") {
-                label = header;
-                key = header;
-            } else {
-
+            if (typeof header === "object") {
                 label = header?.label || header.key;
                 key = header.key;
                 type = header.type || type;
@@ -49,12 +45,16 @@ export function useDataTable() {
                 templateKey = ['link'].includes(type) ? header.templateKey || header.key : templateKey
                 emit = ['link'].includes(type) ? header.emit || false : emit
             }
+            if (typeof header === "string") {
+                label = header;
+                key = header;
+            }
 
             const {columnTypes} = useStatics();
-            if (columnTypes.includes(type)){
+            if (columnTypes.includes(type)) {
                 newHeaders.push(_.omitBy({
                     label: toTitle(removeSlug(label)),
-                    key: toSlug(key, "_"),
+                    key: hasDotOrNumberBracket(key) ? key : toSlug(key, "_"),
                     type,
                     sortable,
                     template,
@@ -64,7 +64,7 @@ export function useDataTable() {
             }
 
         });
-        if (enableCheckbox){
+        if (enableCheckbox) {
             newHeaders.unshift({
                 label: toTitle("checkbox"),
                 key: "checkbox",
@@ -87,6 +87,10 @@ export function useDataTable() {
 
         return newHeaders;
     }
+    const hasDotOrNumberBracket = (str) => {
+        // Check if the string contains a dot (.) or a square bracket with a number inside ([number])
+        return /\./.test(str) || /\[\d+\]/.test(str);
+    }
     const slotName = (key, defaultValue = undefined) => {
         if (typeof key !== 'string' || key.trim() === '') {
             return defaultValue;
@@ -98,15 +102,48 @@ export function useDataTable() {
         if (typeof key !== 'string' || key.trim() === '') {
             return defaultValue;
         }
-
-        const parts = key.split('.');
+        // Split the key by '.' or '[', ']', and filter out empty parts
+        // const parts = key.split('.');
+        const parts = key.split(/\.|\[|\]/).filter(part => part !== '');
         let newContent = content;
 
+        // for (const part of parts) {
+        //     if (!newContent || !hasKey(newContent, part)) {
+        //         return defaultValue;
+        //     }
+        //     newContent = newContent[part];
+        // }
+        // console.log(parts)
         for (const part of parts) {
-            if (!newContent || !hasKey(newContent, part)) {
-                return defaultValue;
+            // Check if part is a number (array index)
+            const index = parseInt(part);
+            if (!isNaN(index)) {
+                // If newContent is an array, use the index
+                if (Array.isArray(newContent)) {
+                    newContent = newContent[index];
+                } else {
+                    return defaultValue; // Invalid array index, return defaultValue
+                }
+            } else if (part === "*") {
+                if (Array.isArray(newContent)) {
+
+                } else {
+                    return defaultValue; // Invalid array index, return defaultValue
+                }
+            } else {
+                // If newContent is an object, use the part as key
+                if (Array.isArray(newContent)) {
+                    let newConcat = ""
+                    newContent.forEach((cont) => {
+                        newConcat += cont[part]+", "
+                    })
+                    newContent = newConcat
+                } else if (newContent !== null && typeof newContent === 'object' && hasKey(newContent, part)) {
+                    newContent = newContent[part];
+                } else {
+                    return defaultValue; // Invalid key, return defaultValue
+                }
             }
-            newContent = newContent[part];
         }
 
         return newContent !== undefined ? newContent : defaultValue;

@@ -2,16 +2,21 @@
 module.exports = {
   content: [
     "./index.html",
-      "./src/**/*.{html,js,vue}"
+      "./src/**/*.{html,js,vue,scss}",
+    'node_modules/preline/dist/*.js',
   ],
   theme: {
     extend: {
       colors:{
-        "coordy-primary":"#",
-        "coordy-secondary":"#",
-        "coordy-accent":"#",
+        "coordy-primary":"#171F35",
+        "coordy-primary-text":"#FFF",
+        "coordy-secondary":"#F9600A",
+        "coordy-secondary-text":"#171F35",
+        "coordy-accent":"#F9600A",
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('preline/plugin'),
+  ],
 }

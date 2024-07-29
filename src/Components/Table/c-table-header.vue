@@ -1,25 +1,30 @@
 <template>
     <thead>
     <tr class="">
-
-        <th class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-            v-for="(header, header_index) in getHeaders" :key="header_index"
-            @click.prevent="handleSort(header)">
-            <div class="flex justify-between items-center w-full space-x-2" v-if="columnTypes.includes(header.type)">
+        <template v-for="(header, header_index) in getHeaders" :key="header_index">
+            <th :class="thClass" v-if="enableCheckbox && header.type==='checkbox'">
+                <input type="checkbox" class="" v-model="isChecked" @input="(e)=> $emit('select-all', !isChecked )" />
+            </th>
+            <th v-else :class="thClass"
+                @click.prevent="handleSort(header)">
+                <div class="th-content"
+                     v-if="columnTypes.includes(header.type)">
                 <span>
                 {{ header.label }}
                 </span>
-                <span class="h-4">
+                    <span class="h-4">
                   <span class="flex justify-end items-center w-full h-4">
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2"
-                            :class="{'opacity-none':isSorted(header.key)==='ASC','opacity-50':isSorted(header.key)!=='ASC'}" fill="none"
+                            :class="{'opacity-none':isSorted(header.key)==='ASC','opacity-50':isSorted(header.key)!=='ASC'}"
+                            fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3"
                        >
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18"/>
                       </svg>
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2"
-                            :class="{'opacity-none':isSorted(header.key)==='DESC','opacity-50':isSorted(header.key)!=='DESC'}" fill="none"
+                            :class="{'opacity-none':isSorted(header.key)==='DESC','opacity-50':isSorted(header.key)!=='DESC'}"
+                            fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="3"
                        >
@@ -27,22 +32,28 @@
                     </svg>
                   </span>
               </span>
-            </div>
-            <span v-if="header.type==='action'">{{header.label}}</span>
-            <input v-if="enableCheckbox && header.type==='checkbox'" type="checkbox" class="" v-model="isChecked" @input="(e)=> $emit('select-all', !isChecked )"/>
-        </th>
+                </div>
+                <span v-if="header.type==='action'">{{ header.label }}</span>
+                <!--            <input type="checkbox" class=""  value="selectAll1" />-->
+                <!--            <c-checkbox v-if="enableCheckbox && header.type==='checkbox'" v-model:checked="isChecked" :value="false"/>-->
+                <!--            <input type="checkbox" class="" v-model="isChecked" value="selectAll" />-->
+            </th>
+
+        </template>
     </tr>
     </thead>
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {useStr} from "@/Composable/useStr.js";
 import {useObj} from "@/Composable/useObj.js";
 import {useDataTable} from "@/Composable/useDataTable.js";
 import _ from "lodash";
 import {useStatics} from "@/Composable/useStatics.js";
+import CCheckbox from "@/Components/Forms/c-checkbox.vue";
 
+const thClass = "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 const emit = defineEmits(['select-all', 'sort-headers'])
 const props = defineProps({
     headers: {
@@ -52,9 +63,9 @@ const props = defineProps({
         type: Object,
         default: {}
     },
-    tableActions:{
-        type:Object,
-        default:{}
+    tableActions: {
+        type: Object,
+        default: {}
     }
 })
 const {hasKey, length} = useObj()
@@ -64,14 +75,14 @@ const {columnTypes} = useStatics();
 const isChecked = ref(false);
 const enableCheckbox = hasKey(props.options, 'checkbox')
 const checkboxOptions = enableCheckbox ? props.options.checkbox : {} //Todo
-const getHeaders = computed(() => computeHeaders(props.headers,props.tableActions,enableCheckbox));
+const getHeaders = computed(() => computeHeaders(props.headers, props.tableActions, enableCheckbox));
 
 const sortOrder = ref([])
 
 const isSorted = (key) => {
     const sortedHeaders = _.map(sortOrder.value, 'header')
     const index = _.indexOf(sortedHeaders, key)
-    if(index === -1){
+    if (index === -1) {
         return null
     }
     return _.result(sortOrder.value, `${index}.direction`)
@@ -92,7 +103,7 @@ const handleSort = (header) => {
         })
     }
 
-    emit('sort-headers',sortOrder)
+    emit('sort-headers', sortOrder)
 }
 
 </script>

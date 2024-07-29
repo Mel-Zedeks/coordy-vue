@@ -28,7 +28,7 @@ import CoordyDataTable from '@mel-zedeks/coordy-vue'
 ```
 use as component 
 ```javascript
- app.component('CoordyDataTable',CoordyDataTable)
+ app.use(Coordy)
 ```
 
 full code for vue 3 "resources/js/app.js" should look like this.
@@ -36,7 +36,8 @@ full code for vue 3 "resources/js/app.js" should look like this.
 import {createApp, h} from 'vue'
 import {createInertiaApp} from '@inertiajs/inertia-vue3'
 
-import CoordyDataTable from '@mel-zedeks/coordy-vue' // this place
+import Coordy from '@mel-zedeks/coordy-vue' // this place
+// @ is an alias for ./scr directory
 import store from "./store/index"
 
 createInertiaApp({
@@ -50,12 +51,46 @@ createInertiaApp({
             })
             .use(plugin)
             .use(store)
-            .component('CoordyDataTable',CoordyDataTable) // this place
+            .use(Coordy) // this place
             .mount(el)
     },
 })
 ```
 
+## Usage
+
+Coordy expects a props that need to be passed
+
+* data
+
+the  data prop has 3 attributes
+* content - responsible for the table content, pagination, entries
+* settings - use to configure the table to enable features like 
+  * checkbox
+  * limit
+  * search
+  * sort and more
+* headers - use to customize the table header content
+
+
+## examples
+
+### basic use:
+```vue
+const backend = reactive({
+    // show only the data you want in the table, even when there are other data available in the records
+    headers: ['name', 'age'], 
+    content: {
+        data: [
+          // data from api
+          {id:1, name:"John", age:20} 
+        ]
+    }
+    settings: {
+        tableTitle: "Table Name",
+    }
+}}
+```
 
 
 ### CSS
