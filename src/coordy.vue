@@ -6,7 +6,7 @@ import CSelect from "@/Components/Forms/c-select.vue";
 import CLoadingModal from "@/Components/modals/c-loading-modal.vue";
 import CContentCounter from "@/Components/Table/c-content-counter.vue";
 import CPagination from "@/Components/Table/c-pagination.vue";
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import {computed, onMounted, onUpdated, reactive, ref, watch} from "vue";
 import CTableHeader from "@/Components/Table/c-table-header.vue";
 import {useObj} from "@/Composable/useObj.js";
 import {useDataTable} from "@/Composable/useDataTable.js";
@@ -180,11 +180,7 @@ watch(payLoad, (value, oldValue) => {
     emit('coordy-payload', value)
 }, {deep: true})
 
-onMounted(() => {
-    setTimeout(() => {
-        window.HSStaticMethods.autoInit();
-    }, 100)
-})
+
 </script>
 
 <template>

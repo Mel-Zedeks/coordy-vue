@@ -36,7 +36,7 @@
         <div class="flex justify-start items-center space-x-2 relative" v-if="actionType==='dropDown'">
             <div class="hs-dropdown relative w-full">
                 <button type="button"
-                        class="hs-dropdown-toggle btn w-full flex justify-center items-center text-coordy-primary-text">
+                        class="hs-dropdown-toggle btn w-full text-coordy-primary-text">
                     <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
                         <path d="M64 360a56 56 0 1 0 0 112 56 56 0 1 0 0-112zm0-160a56 56 0 1 0 0 112 56 56 0 1 0 0-112zM120 96A56 56 0 1 0 8 96a56 56 0 1 0 112 0z"/>
                     </svg>
@@ -66,6 +66,7 @@
 
 import {useObj} from "@/Composable/useObj.js";
 import {useStatics} from "@/Composable/useStatics.js";
+import {onMounted, onUpdated} from "vue";
 
 const props = defineProps({
     options: {
@@ -127,6 +128,22 @@ const handleConditions = (action, content) => {
 }
 const handleEmit = (data) => {
     emit('table-action', data)
+}
+onMounted(() => {
+    if (actionType === "dropDown") {
+        initActionDropDown()
+    }
+
+})
+onUpdated(() => {
+    if (actionType === "dropDown") {
+        initActionDropDown()
+    }
+})
+const initActionDropDown = () => {
+    setTimeout(() => {
+        window.HSStaticMethods.autoInit();
+    }, 100)
 }
 </script>
 
