@@ -110,7 +110,7 @@ const backend2 = reactive({
     settings: {
         tableTitle: "All Apps",
         addNew: {
-            uri: "",
+            uri: "hi",
             label: "MyCreate"
         },
         limits: {

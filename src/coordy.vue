@@ -230,7 +230,7 @@ watch(payLoad, (value, oldValue) => {
                     </div>
                     <div class="z-section-container">
                         <div class="flex justify-end items-center space-x-2">
-                            <c-link-btn class="z-btn" @create-button="(e)=>preparePayload('header.createButton',e)" :label="addNew?.label" :uri="addNew?.uri"
+                            <c-link-btn class="z-btn" @create-button="(e)=>preparePayload('head.createButton',e)" :label="addNew?.label" :uri="addNew?.uri"
                                         v-if="length(addNew)>0 && addNew.label"/>
                             <c-link-btn class="z-btn" :label="addBulk?.label" :uri="addBulk?.uri"
                                         v-if="length(addBulk)>0 && addBulk.label"/>
