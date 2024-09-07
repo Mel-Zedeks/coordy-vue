@@ -1,5 +1,5 @@
 <template>
-    <a  :href="uri">
+    <a href="javascript:;" @click.prevent="handleEmit()">
            <span>
             {{ label }}
            </span>
@@ -8,16 +8,23 @@
 </template>
 
 <script setup>
-const props =defineProps({
-    label:{
+const emit = defineEmits(['create-button'])
+const props = defineProps({
+    label: {
         type: String,
-        default:""
+        default: ""
     },
-    uri:{
+    uri: {
         type: String,
-        default:""
-    }
+        default: ""
+    },
 })
+
+const handleEmit = () => {
+    let data = {}
+    data = {route: props.uri, params: [], method: "get"}
+    emit('create-button', data)
+}
 </script>
 
 <style scoped>
